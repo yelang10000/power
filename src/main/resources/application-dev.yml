@@ -1,0 +1,48 @@
+server:
+  port: 9000
+spring:
+  datasource:
+    druid:
+      url: jdbc:mysql://127.0.0.1:3306/power?useSSL=false&serverTimezone=GMT%2b8&autoReconnect=true&roundRobinLoadBalance=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=utf8
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: jiatao
+      initial-size:  10
+      max-active:  50
+      min-idle:  10
+      max-wait:  60000
+      pool-prepared-statements:  true
+      max-pool-prepared-statement-per-connection-size:  20
+      validation-query:  SELECT 1 FROM DUAL
+      test-on-borrow:  false
+      test-on-return:  false
+      test-while-idle:  true
+      time-between-eviction-runs-millis:  60000
+      filters:  stat
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 20000
+    jedis:
+      pool:
+        max-active: 100
+        max-wait: 1000
+        max-idle: 300
+#    password: icloud20180809153439
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 40MB
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    call-setters-on-nulls: true
+

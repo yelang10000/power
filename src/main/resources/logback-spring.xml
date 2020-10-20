@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml" />
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+	<!--(必须定义在logger之前)每天生成一个日志文件，保存7天的日志文件。rollingFile是用来切分文件的 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 设置按尺寸和时间（同时满足）分割 -->
+		<rollingPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- rollover daily -->
+			<fileNamePattern>Power_logs/stdout.log.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<!-- each file should be at most 50MB, keep 7 days worth of history,
+				but at most 3GB -->
+			<maxFileSize>50MB</maxFileSize>
+			<maxHistory>7</maxHistory>
+			<totalSizeCap>5GB</totalSizeCap>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}-%msg%n</pattern>
+			<charset>UTF-8</charset> <!-- 此处设置字符集 -->
+		</encoder>
+	</appender>
+
+	<logger name="jdbc.connection" additivity="true" level="FATAL">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</logger>
+	<logger name="jdbc.resultset" additivity="false" level="DEBUG">
+		<appender-ref ref="FILE" />
+	</logger>
+	<logger name="jdbc.audit" additivity="true" level="WARN">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</logger>
+	<logger name="jdbc.sqlonly" additivity="true" level="INFO">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</logger>
+	<logger name="jdbc.sqltiming" additivity="true" level="DEBUG">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FILE" />
+	</logger>
+
+	<!-- project default level -->
+	<logger name="com.hiynn.cccf" level="INFO" />
+
+	<!-- 格式化输出：%date表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度 %msg：日志消息，%n是换行符-->
+	<property name="LOG_PATTERN"
+			  value="%red(%date{HH:mm:ss.SSS})  %green([%thread] %-5level %logger{36} - %msg%n)" />
+
+	<!-- 控制台输出日志 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<!-- 按照上面配置的LOG_PATTERN来打印日志 -->
+			<pattern>${LOG_PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- 日志输出级别:DEBUG,INFO,WARN,ERROR四种-->
+	<root level="INFO">
+		<appender-ref ref="console" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>

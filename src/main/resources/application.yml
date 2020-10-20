@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: PowerMsp
+  profiles:
+    active: dev
+  messages:
+    encoding: UTF-8
+    basename: i18n/messages
+  thymeleaf:
+    cache: false
+    mode: LEGACYHTML5
+#\u65E5\u5FD7\u914D\u7F6E
+logging:
+  config: classpath:logback-spring.xml
